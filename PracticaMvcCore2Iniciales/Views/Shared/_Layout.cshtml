@@ -27,53 +27,23 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Libros" asp-action="Index">Libros</a>
                         </li>
 
+                        @await Component.InvokeAsync("MenuGeneros")
+
                         <partial name="_Carrito" />
 
-                        @* @foreach (var genero in Genero)
-                        {
-                            <li>
-                                <a class="dropdown-item"
-                                   asp-controller="Libros" asp-action="Index"
-                                   asp-route-genero="@genero">
-                                    @genero
-                                </a>
-                            </li>
-                        } *@
-                        
-                        @* <li>
-                            <ul class="dropdown-menu">
-                                @foreach (Genero gen in Model)
-                                {
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Libros" asp-action="LibrosGenero" asp-route-idgenero="@gen.IdGenero">@gen.Nombre</a>
-                                    </li>
-                                }
-                            </ul>
-                        </li> *@
-
-                        @* <li>
-                            <ul class="dropdown-menu">
-                                @foreach (Genero gen in Libro)
-                                {
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Libros" asp-action="LibrosGenero" asp-route-idgenero="@gen.IdGenero">@gen.Nombre</a>
-                                    </li>
-                                }
-                            </ul>
-                        </li> *@
-
-                        @* <li>
-                            <ul class="dropdown-menu">
-                                @foreach (var item in (SelectList)ViewBag.Libros)
-                                {
-                                    <a class="dropdown-item"
-                                       asp-controller="Libros" asp-action="Index"
-                                       asp-route-genero="@item">
-                                        @item
-                                    </a>
-                                }
-                            </ul>
-                        </li> *@
+                        <li class="nav-item">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <p class="nav-link text-dark">
+                                    Perfil (@User.Identity.Name)
+                                </p>
+                                <a class="nav-link text-danger" asp-controller="Managed" asp-action="Logout">Cerrar Sesión</a>
+                            }
+                            else
+                            {
+                                <a class="nav-link text-dark" asp-controller="Managed" asp-action="Login">Iniciar Sesión</a>
+                            }
+                        </li>
                             
                     </ul>
                 </div>

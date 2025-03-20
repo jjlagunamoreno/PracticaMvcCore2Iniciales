@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 using PracticaMvcCore2Iniciales.Data;
 using PracticaMvcCore2Iniciales.Extensions;
+using PracticaMvcCore2Iniciales.Filters;
 using PracticaMvcCore2Iniciales.Models;
 using PracticaMvcCore2Iniciales.Repositories;
 
@@ -66,7 +69,7 @@ namespace PracticaMvcCore2Iniciales.Controllers
         }
 
         // MOSTRAR EL CARRITO
-        public IActionResult Carrito(int? idLibroEliminar)
+        public async Task<IActionResult> Carrito(int? idEliminar)
         {
             //Le pasamos el carrito
             List<int> carrito = HttpContext.Session.GetObject<List<int>>("CARRITO");
@@ -78,14 +81,56 @@ namespace PracticaMvcCore2Iniciales.Controllers
             }
             else
             {
-                if (idLibroEliminar != null)
+                if (idEliminar != null)
                 {
-                    carrito.Remove(idLibroEliminar.Value);
+                    carrito.Remove(idEliminar.Value);
                     HttpContext.Session.SetObject("CARRITO", carrito);
                 }
-                List<Libro> peliculas = this.repo.GetLibrosCarrito(carrito);
-                return View(peliculas);
+                List<Libro> libros = await this.repo.GetCarritoAsync(carrito);
+                return View(libros);
             }
+        }
+
+        [AuthorizeLibros]
+        [HttpPost]
+        public async Task<IActionResult> Compra(List<int> carrito)
+        {
+            var idUsuarioClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (idUsuarioClaim == null)
+            {
+                return RedirectToAction("Login");
+            }
+            int idUsuario = int.Parse(idUsuarioClaim.Value);
+
+            int idpedido = await repo.GetUltimoIdPedido();
+            int idfactura = await repo.GetUltimaFactura() + 1;
+            for (int i = 0; i < carrito.Count; i++)
+            {
+                int idLibro = carrito[i];
+                idpedido++;
+                Pedido nuevoPedido = new Pedido()
+                {
+                    IdPedido = idpedido,
+                    IdFactura = idfactura,
+                    Fecha = DateTime.Now,
+                    IdLibro = idLibro,
+                    IdUsuario = idUsuario,
+                    Cantidad = 1
+                };
+
+                await repo.ComprarProducto(nuevoPedido);
+
+            }
+            HttpContext.Session.Remove("CARRITO");
+            return RedirectToAction("PerfilUsuario", "Managed", new { iduser = idUsuario });
+        }
+
+        [AuthorizeLibros]
+        public async Task<IActionResult> ComprasUsuario(int iduser)
+        {
+            List<VistaPedidos> pedidos = await this.repo.GetPedidosUsuario(iduser);
+
+            return View(pedidos);
         }
     }
 }

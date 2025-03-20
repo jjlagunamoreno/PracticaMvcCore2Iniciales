@@ -1,0 +1,37 @@
+﻿@model IEnumerable<PracticaMvcCore2Iniciales.Models.Libro>
+
+@{
+    ViewData["Title"] = "";
+    Genero genero = @ViewData["GENERO"] as Genero;
+}
+
+<h1>@genero.Nombre</h1>
+
+<div>
+    @foreach (var item in Model)
+    {
+        <div class="col">
+            <div class="card">
+                <img src="~/images/@item.Portada" style="width:200px;height:250px;">
+                <div class="row-gap-sm-6">
+                    <h5>@item.Titulo</h5>
+                    <p><strong>Editorial: </strong>@item.Editorial</p>
+                </div>
+                <div class="row-gap-sm-6">
+                    <a asp-controller="Libros"
+                       asp-action="DetallesLibro"
+                       asp-route-idlibro="@item.IdLibro"
+                       class="btn btn-info">
+                        Detalles
+                    </a>
+                    <a asp-controller="Libros"
+                       asp-action="GuardarLibroCarrito"
+                       asp-route-idLibro="@item.IdLibro"
+                       class="btn btn-outline-primary">
+                        Comprar
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

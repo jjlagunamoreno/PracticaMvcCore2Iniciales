@@ -1,0 +1,47 @@
+﻿@model PracticaMvcCore2Iniciales.Models.Usuario
+
+@{
+    ViewData["Title"] = "Perfil de Usuario";
+}
+
+<h2>Perfil de Usuario</h2>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">@Model.Nombre</h4>
+        <p><strong>Email:</strong> @Model.Email</p>
+    </div>
+</div>
+
+<h3>Compras Realizadas</h3>
+
+@if (ViewBag.Compras != null && ViewBag.Compras.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID Compra</th>
+                <th>Nombre del Cubo</th>
+                <th>Precio</th>
+                <th>Fecha de Pedido</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var compra in ViewBag.Compras)
+            {
+                <tr>
+                    <td>@compra.IdCompra</td>
+                    <td>@compra.Nombre_Cubo</td>
+                    <td>@compra.Precio €</td>
+                    <td>@compra.FechaPedido.ToString("dd/MM/yyyy HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No has realizado ninguna compra aún.</p>
+}
+
+<a asp-action="Logout" class="btn btn-danger mt-3">Cerrar sesión</a>

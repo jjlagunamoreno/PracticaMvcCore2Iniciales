@@ -1,55 +1,34 @@
-﻿@model IEnumerable<PracticaMvcCore2Iniciales.Models.Libro>
+﻿@model List<Libro>
 
-@{
-    ViewData["Title"] = "Carrito";
-}
+@using System.Security.Claims
 
-<h1>Carrito de Compras</h1>
+<h1>Carrito</h1>
 
-@if (Model != null && Model.Any())
-{
-    <form asp-controller="Libros" asp-action="Compra" method="post">
-        @* @for (int i = 0; i < Model.Count(); i++)
-        {
-            <input type="hidden" name="idlibros[@i]" value="@Model.ElementAt(i).IdLibro" />
-            <input type="hidden" name="iduser" value="@Context.User.FindFirst("id").Value" />
-        } *@
+<form method="post" asp-action="Compra" asp-controller="Libros">
+    @foreach (var libro in Model)
+    {
+        <input type="hidden" name="carrito[]" value="@libro.IdLibro" />
+    }
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Autor</th>
-                    <th>Precio</th>
-                    <th>Cantidad</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < Model.Count(); i++)
-                {
-                    <tr>
-                        <td>@Html.DisplayFor(_ => Model.ElementAt(i).Titulo)</td>
-                        <td>@Html.DisplayFor(_ => Model.ElementAt(i).Autor)</td>
-                        <td>@Html.DisplayFor(_ => Model.ElementAt(i).Precio) €</td>
-                        <td>
-                            <input type="number" name="cantidades[@i]" value="1" min="1" class="form-control" />
-                        </td>
-                        <td>
-                            <a asp-controller="Libros" asp-action="Carrito" asp-route-idLibroEliminar="@Model.ElementAt(i).IdLibro" class="btn btn-outline-danger">
-                                Eliminar
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <button type="submit" class="btn btn-primary">Finalizar Compra</button>
-    </form>
-}
-else
-{
-    <div class="alert alert-info" role="alert">
-        Carrito Vacío.
-    </div>
-}
+    <button type="submit" class="btn btn-success">Comprar</button>
+</form>
+
+
+<div class="row">
+    @foreach (var libro in Model)
+    {
+        <div class="col-4">
+            <div class="card">
+                <img src="~/images/@libro.Portada" class="card-img-top" style="width:100px; height:150px; text-align:center;">
+                <div class="card-body">
+                    <h5 class="card-title">@libro.Titulo</h5>
+                    <p class="card-text">Autor: @libro.Autor</p>
+                    <p class="card-text">Editorial: @libro.Editorial</p>
+                    <p class="card-text">Precio: @libro.Precio €</p>
+                    <a asp-action="Carrito" asp-route-idEliminar="@libro.IdLibro" class="btn btn-danger">Eliminar</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
