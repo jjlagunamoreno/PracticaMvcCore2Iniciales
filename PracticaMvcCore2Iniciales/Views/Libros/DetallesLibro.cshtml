@@ -1,0 +1,66 @@
+﻿@model PracticaMvcCore2Iniciales.Models.Libro
+
+@{
+    ViewData["Title"] = "DetallesLibro";
+}
+
+<h1>DetallesLibro</h1>
+
+<div style="text-align:center;">
+    <h4>Libro</h4>
+    <img src="~/images/@Html.DisplayFor(model => model.Portada)" style="width:200px; height:350px;" />
+    <hr />
+    <dl class="row">
+        @* <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IdLibro)
+        </dt> *@
+        <dd class="col-sm-12 border-2">
+            <b>ID Libro: </b>@Html.DisplayFor(model => model.IdLibro)
+        </dd>
+        @* <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Titulo)
+        </dt> *@
+        <dd class="col-sm-12">
+            @Html.DisplayFor(model => model.Titulo)
+        </dd>
+        @* <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Autor)
+        </dt> *@
+        <dd class="col-sm-12">
+            @Html.DisplayFor(model => model.Autor)
+        </dd>
+        @* <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Editorial)
+        </dt> *@
+        <dd class="col-sm-12">
+            @Html.DisplayFor(model => model.Editorial)
+        </dd>
+        @* <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Portada)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Portada)
+        </dd> *@
+        @* <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Resumen)
+        </dt> *@
+        <dd class="col-sm-12">
+            @Html.DisplayFor(model => model.Resumen)
+        </dd>
+        @* <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Precio)
+        </dt> *@
+        <dd class="col-sm-12">
+            @Html.DisplayFor(model => model.Precio) €
+        </dd>
+        @* <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IdGenero)
+        </dt> *@
+        <dd class="col-sm-12">
+            <b>ID Género: </b>@Html.DisplayFor(model => model.IdGenero)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
